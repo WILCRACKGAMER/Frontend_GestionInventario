@@ -14,8 +14,10 @@ export class Lote {
     lote_FechaCreacion: Date = new Date()
     usua_Modificacion?: number = 0;
     lote_FechaModificacion?: Date;
+    sucursal?: string = '';
     direccion?: string = '';
     producto?: string = '';
     usuarioCreacion?: string = '';
     usuarioModificacion?: string = '';
+    dropdownOpen?: boolean = false;
 }   

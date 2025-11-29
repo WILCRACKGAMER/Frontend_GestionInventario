@@ -113,3 +113,21 @@
   background: #5e35b1;
   color: #ffffff;
 }
+
+.dropdown-menu {
+  position: absolute !important;
+  z-index: 1000 !important;
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block !important;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.table-responsive {
+  overflow: visible !important;
+}

@@ -25,6 +25,7 @@
                 <th>Código</th>
                 <th>Producto</th>
                 <th>Sucursal</th>
+                <th>Dirección</th>
                 <th>Descripción</th>
                 <th>Fecha Fabricación</th>
                 <th>Fecha Vencimiento</th>
@@ -37,36 +38,37 @@
             <tbody>
               <tr *ngFor="let lote of lotesPaginados">
                 <td>
-                  <div class="dropdown">
-                    <button class="btn btn-actions dropdown-toggle" 
+                    <div class="dropdown position-relative">
+                        <button class="btn btn-actions dropdown-toggle" 
                             type="button" 
-                            id="dropdownMenuButton{{lote.lote_Id}}"
-                            data-bs-toggle="dropdown">
-                      Acciones
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                      <li>
-                        <a class="dropdown-item" href="javascript:void(0);" (click)="onEditar(lote)">
-                          <i class="ri-settings-3-line me-2"></i>Editar
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="javascript:void(0);" (click)="onEliminar(lote)">
-                          <i class="ri-delete-bin-line me-2"></i>Eliminar
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="javascript:void(0);" (click)="onDetalle(lote)">
-                          <i class="ri-information-line me-2"></i>Detalles
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                            (click)="toggleDropdown(lote); $event.stopPropagation()">
+                            Acciones
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" 
+                            [style.display]="lote.dropdownOpen ? 'block' : 'none'"
+                            style="position: absolute; z-index: 1050;">
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0);" (click)="onEditar(lote); $event.stopPropagation()">
+                                    <i class="ri-pencil-line me-2"></i>Editar
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0);" (click)="onEliminar(lote); $event.stopPropagation()">
+                                    <i class="ri-delete-bin-line me-2"></i>Eliminar
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0);" (click)="onDetalle(lote); $event.stopPropagation()">
+                                    <i class="ri-information-line me-2"></i>Detalles
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>{{ lote.secuencia }}</td>
                 <td>{{ lote.lote_Codigo }}</td>
                 <td>{{ lote.producto }}</td>
+                <td>{{ lote.sucursal }}</td>
                 <td>{{ lote.direccion }}</td>
                 <td>{{ lote.lote_Descripcion }}</td>
                 <td>{{ lote.lote_FechaFabricacion | date: 'dd/MM/yyyy' }}</td>
@@ -82,8 +84,6 @@
                     {{ lote.lote_Stock }}
                   </span>
                 </td>
-
-                <td>{{ lote.usuarioCreacion }}</td>
               </tr>
 
               <tr *ngIf="lotes.length === 0">

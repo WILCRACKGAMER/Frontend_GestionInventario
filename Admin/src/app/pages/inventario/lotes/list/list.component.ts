@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { BreadcrumbsComponent } from 'src/app/shared/breadcrumbs/breadcrumbs.component';
 import { Lote } from 'src/app/Modelos/Inventario/lote.model';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+
+interface LoteConDropdown extends Lote {
+  dropdownOpen?: boolean;
+}
 
 @Component({
   selector: 'app-list',
@@ -14,8 +18,8 @@ import { CommonModule } from '@angular/common';
 export class ListComponent implements OnInit {
   
   // Datos
-  lotes: Lote[] = [];
-  lotesPaginados: Lote[] = [];
+  lotes: LoteConDropdown[] = [];
+  lotesPaginados: LoteConDropdown[] = [];
   
   // Paginación
   paginaActual: number = 1;
@@ -39,12 +43,41 @@ export class ListComponent implements OnInit {
     this.cargarLotes();
   }
 
+  // Cerrar dropdowns al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown')) {
+      this.closeAllDropdowns();
+    }
+  }
+
+  toggleDropdown(lote: LoteConDropdown): void {
+    console.log('Toggle dropdown para lote:', lote.lote_Id, 'Estado actual:', lote.dropdownOpen);
+    
+    // Cerrar todos los demás dropdowns
+    this.lotesPaginados.forEach(l => {
+      if (l.lote_Id !== lote.lote_Id) {
+        l.dropdownOpen = false;
+      }
+    });
+    
+    // Toggle del dropdown actual
+    lote.dropdownOpen = !lote.dropdownOpen;
+    
+    console.log('Nuevo estado:', lote.dropdownOpen);
+  }
+
+  closeAllDropdowns(): void {
+    this.lotesPaginados.forEach(l => l.dropdownOpen = false);
+  }
+
   cargarLotes(): void {
     this.cargando = true;
     
     this.http.get<Lote[]>(this.apiUrl).subscribe({
       next: (data) => {
-        this.lotes = data;
+        this.lotes = data.map(lote => ({...lote, dropdownOpen: false}));
         this.calcularPaginacion();
         this.cargando = false;
       },
@@ -92,6 +125,7 @@ export class ListComponent implements OnInit {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
       this.paginaActual = pagina;
       this.calcularPaginacion();
+      this.closeAllDropdowns();
     }
   }
 
@@ -101,18 +135,21 @@ export class ListComponent implements OnInit {
     // Por ejemplo: this.router.navigate(['/lotes/crear']);
   }
 
-  onDetalle(lote: Lote): void {
+  onDetalle(lote: LoteConDropdown): void {
+    lote.dropdownOpen = false;
     console.log('Ver detalle del lote:', lote);
     // Aquí implementarás la lógica para ver el detalle
   }
 
-  onEditar(lote: Lote): void {
+  onEditar(lote: LoteConDropdown): void {
+    lote.dropdownOpen = false;
     console.log('Editar lote:', lote);
     // Aquí implementarás la lógica para editar
   }
 
-  onEliminar(lote: Lote): void {
+  onEliminar(lote: LoteConDropdown): void {
+    lote.dropdownOpen = false;
     console.log('Eliminar lote:', lote);
     // Aquí implementarás la lógica para eliminar
   }
-}
+} 
