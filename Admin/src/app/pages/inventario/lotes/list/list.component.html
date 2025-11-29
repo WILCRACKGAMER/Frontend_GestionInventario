@@ -1,25 +1,135 @@
-<app-breadcrumbs
+<app-breadcrumbs 
   [title]="'Lotes'"
   [breadcrumbItems]="[
     { label: 'Inventario' },
     { label: 'Lotes', active: true }
   ]"
->
-  <img class="breadcrumbs-icon ms-2 icon-breadcrumb" src="assets/images/svg/provider_icon.svg" style="width: 12vh; height: 12vh;" alt="icono breadcrumb" />
-</app-breadcrumbs>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" *ngIf="!showCreateForm && !showEditForm && !showDetailsForm">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <button *ngIf="accionPermitida('crear')" type="button" class="btn btn-primary me-2" (click)="crear()">
-                            <span class="btn-text">Nuevo</span>
-                            <span class="btn-icon"><i class="ri-add-line"></i></span>
-                        </button>
-                    </div>
-                </div>         
-            </div>
+></app-breadcrumbs>
+
+<div class="row lotes-container">
+  <div class="col-lg-12">
+    <div class="card lotes-card shadow-lg">
+      <div class="card-header d-flex align-items-center justify-content-between lotes-card-header">
+        <button type="button" class="btn btn-lote-primary" (click)="onCrear()">
+          <i class="ri-add-line align-bottom me-1"></i> Nuevo
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table mb-0 lotes-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Acciones</th>
+                <th>No.</th>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Sucursal</th>
+                <th>Descripción</th>
+                <th>Fecha Fabricación</th>
+                <th>Fecha Vencimiento</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad Por Lote</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let lote of lotesPaginados">
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-actions dropdown-toggle" 
+                            type="button" 
+                            id="dropdownMenuButton{{lote.lote_Id}}"
+                            data-bs-toggle="dropdown">
+                      Acciones
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li>
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="onEditar(lote)">
+                          <i class="ri-settings-3-line me-2"></i>Editar
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="onEliminar(lote)">
+                          <i class="ri-delete-bin-line me-2"></i>Eliminar
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="onDetalle(lote)">
+                          <i class="ri-information-line me-2"></i>Detalles
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+                <td>{{ lote.secuencia }}</td>
+                <td>{{ lote.lote_Codigo }}</td>
+                <td>{{ lote.producto }}</td>
+                <td>{{ lote.direccion }}</td>
+                <td>{{ lote.lote_Descripcion }}</td>
+                <td>{{ lote.lote_FechaFabricacion | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ lote.lote_FechaVencimiento | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ lote.lote_PrecioUnitario | currency: 'L ' }}</td>
+                <td>{{ lote.lote_CantidadProductos }}</td>
+                <td>
+                  <span class="badge stock-badge"
+                        [ngClass]="
+                          lote.lote_Stock > 30 ? 'stock-ok' :
+                          lote.lote_Stock > 0 ? 'stock-mid' : 'stock-low'
+                        ">
+                    {{ lote.lote_Stock }}
+                  </span>
+                </td>
+
+                <td>{{ lote.usuarioCreacion }}</td>
+              </tr>
+
+              <tr *ngIf="lotes.length === 0">
+                <td colspan="9" class="text-center py-4">
+                  <i class="ri-inbox-line fs-1 text-muted"></i>
+                  <p class="text-muted mt-2">No hay lotes registrados</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <!-- Paginación -->
+        <div class="row justify-content-between align-items-center p-3" *ngIf="lotes.length > 0">
+          <div class="col-sm-6 text-muted">
+            Mostrando 
+            <span class="fw-semibold text-white">{{ inicioRegistro }}</span> a 
+            <span class="fw-semibold text-white">{{ finRegistro }}</span> de 
+            <span class="fw-semibold text-white">{{ totalRegistros }}</span> registros
+          </div>
+
+          <div class="col-sm-6">
+            <ul class="pagination pagination-sm justify-content-end">
+              <li class="page-item" [ngClass]="{ 'disabled': paginaActual === 1 }">
+                <a class="page-link lote-page" href="javascript:void(0);" (click)="cambiarPagina(paginaActual - 1)">
+                  <i class="mdi mdi-chevron-left"></i>
+                </a>
+              </li>
+
+              <li class="page-item" *ngFor="let pagina of paginasVisibles" 
+                  [ngClass]="{ 'active': pagina === paginaActual }">
+                <a class="page-link lote-page" href="javascript:void(0);" (click)="cambiarPagina(pagina)">
+                  {{ pagina }}
+                </a>
+              </li>
+
+              <li class="page-item" [ngClass]="{ 'disabled': paginaActual === totalPaginas }">
+                <a class="page-link lote-page" href="javascript:void(0);" (click)="cambiarPagina(paginaActual + 1)">
+                  <i class="mdi mdi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 </div>

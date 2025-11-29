@@ -1,0 +1,115 @@
+/* CONTENEDOR PRINCIPAL */
+.lotes-container {
+  background: #181a20;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* CARD */
+.lotes-card {
+  background: #1f2128;
+  border: 1px solid #5e35b1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.lotes-card-header {
+  background: #5e35b1;
+  padding: 15px;
+  border-bottom: 4px solid #ffe082;
+}
+
+/* BOTÓN */
+.btn-lote-primary {
+  background: #ffe082;
+  color: #181a20;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+}
+
+.btn-lote-primary:hover {
+  background: #ffdf99;
+}
+
+/* TABLA */
+.lotes-table {
+  color: #ffffff;
+  background: #181a20;
+}
+
+.lotes-table thead tr {
+  background: #5e35b1;
+  color: #ffffff;
+}
+
+.lotes-table tbody tr {
+  border-bottom: 1px solid #2b2d33;
+}
+
+.lotes-table tbody tr:hover {
+  background: rgba(94, 53, 177, 0.15);
+}
+
+/* STOCK BADGES */
+.stock-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.stock-ok {
+  background: #4caf50;
+}
+
+.stock-mid {
+  background: #ffe082;
+  color: #181a20;
+}
+
+.stock-low {
+  background: #e53935;
+}
+
+/* DROPDOWN */
+.btn-actions {
+  background: #97979a;
+  color: #181a20;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.btn-actions:hover {
+  background: #b4b4b6;
+}
+
+.dropdown-menu-dark {
+  background: #1c1d22;
+}
+
+.dropdown-menu-dark .dropdown-item {
+  color: #ffffff;
+}
+
+.dropdown-menu-dark .dropdown-item:hover {
+  background: #5e35b1;
+}
+
+/* PAGINACIÓN */
+.lote-page {
+  background: #181a20;
+  border: 1px solid #5e35b1;
+  color: #ffe082;
+}
+
+.page-item.active .lote-page {
+  background: #5e35b1 !important;
+  color: #ffffff !important;
+  border-color: #5e35b1 !important;
+}
+
+.page-item .lote-page:hover {
+  background: #5e35b1;
+  color: #ffffff;
+}
