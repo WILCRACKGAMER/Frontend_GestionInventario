@@ -1,1 +1,163 @@
-<p>create works!</p>
+<div class="card lote-form-card shadow-lg">
+  <div class="card-body">
+    <!-- Mensajes de alerta -->
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="mensajeError">
+      <i class="ri-error-warning-line me-2"></i>{{ mensajeError }}
+      <button type="button" class="btn-close" (click)="mensajeError = ''"></button>
+    </div>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="mensajeExito">
+      <i class="ri-checkbox-circle-line me-2"></i>{{ mensajeExito }}
+      <button type="button" class="btn-close" (click)="mensajeExito = ''"></button>
+    </div>
+
+    <form>
+      <div class="row g-3">
+        <!-- Código del Lote -->
+        <div class="col-md-4">
+          <label class="form-label">Código del Lote <span class="text-danger">*</span></label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="nuevoLote.lote_Codigo"
+            name="lote_Codigo"
+            placeholder="Ej: LOTE-001"
+            [disabled]="guardando">
+        </div>
+
+        <!-- Sucursal -->
+        <div class="col-md-4">
+          <label class="form-label">Sucursal <span class="text-danger">*</span></label>
+          <select 
+            class="form-select" 
+            [(ngModel)]="nuevoLote.sucu_Id"
+            name="sucu_Id"
+            [disabled]="guardando">
+            <option [ngValue]="0">Seleccione una sucursal</option>
+            <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucu_Id">
+              {{ sucursal.sucu_Nombre }} - ({{ sucursal.direccion }})
+            </option>
+          </select>
+        </div>
+
+        <!-- Producto -->
+        <div class="col-md-4">
+          <label class="form-label">Producto <span class="text-danger">*</span></label>
+          <select 
+            class="form-select" 
+            [(ngModel)]="nuevoLote.prod_Id"
+            name="prod_Id"
+            [disabled]="guardando">
+            <option [ngValue]="0">Seleccione un producto</option>
+            <option *ngFor="let producto of productos" [ngValue]="producto.prod_Id">
+              {{ producto.prod_Nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Descripción -->
+        <div class="col-md-12">
+          <label class="form-label">Descripción <span class="text-danger">*</span></label>
+          <textarea 
+            class="form-control" 
+            rows="2"
+            [(ngModel)]="nuevoLote.lote_Descripcion"
+            name="lote_Descripcion"
+            placeholder="Descripción del lote"
+            [disabled]="guardando"></textarea>
+        </div>
+
+        <!-- Fecha de Fabricación -->
+        <!-- Fecha de Fabricación -->
+        <div class="col-md-4">
+          <label class="form-label">Fecha de Fabricación <span class="text-danger">*</span></label>
+          <input 
+            type="date" 
+            class="form-control"
+            [value]="formatearFecha(nuevoLote.lote_FechaFabricacion)"
+            (change)="onFechaFabricacionChange($event)"
+            name="lote_FechaFabricacion"
+            [disabled]="guardando">
+        </div>
+
+        <!-- Fecha de Vencimiento -->
+        <div class="col-md-4">
+          <label class="form-label">Fecha de Vencimiento <span class="text-danger">*</span></label>
+          <input 
+            type="date" 
+            class="form-control"
+            [value]="formatearFecha(nuevoLote.lote_FechaVencimiento)"
+            (change)="onFechaVencimientoChange($event)"
+            name="lote_FechaVencimiento"
+            [disabled]="guardando">
+        </div>
+
+        <!-- Precio Unitario -->
+        <div class="col-md-4">
+          <label class="form-label">Precio Unitario (L) <span class="text-danger">*</span></label>
+          <input 
+            type="number" 
+            class="form-control"
+            [(ngModel)]="nuevoLote.lote_PrecioUnitario"
+            name="lote_PrecioUnitario"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+            [disabled]="guardando">
+        </div>
+
+        <!-- Cantidad de Productos -->
+        <div class="col-md-6">
+          <label class="form-label">Cantidad de Productos <span class="text-danger">*</span></label>
+          <input 
+            type="number" 
+            class="form-control"
+            [(ngModel)]="nuevoLote.lote_CantidadProductos"
+            name="lote_CantidadProductos"
+            placeholder="0"
+            min="1"
+            [disabled]="guardando">
+          <small class="text-muted">Cantidad de productos que trae el lote</small>
+        </div>
+
+        <!-- Stock -->
+        <div class="col-md-6">
+          <label class="form-label">Stock <span class="text-danger">*</span></label>
+          <input 
+            type="number" 
+            class="form-control"
+            [(ngModel)]="nuevoLote.lote_Stock"
+            name="lote_Stock"
+            placeholder="0"
+            min="1"
+            [disabled]="guardando">
+          <small class="text-muted">Cantidad de lotes disponibles</small>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="onCancelar()"
+          [disabled]="guardando">
+          <i class="ri-close-line me-1"></i>Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-primary"
+          (click)="onGuardar()"
+          [disabled]="guardando">
+          <span *ngIf="!guardando">
+            <i class="ri-save-line me-1"></i>Guardar
+          </span>
+          <span *ngIf="guardando">
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+            Guardando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,21 +1,30 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" data-layout-mode="dark" data-bs-theme="dark">
 
 <head>
   <meta charset="utf-8">
   <title>Steex - Angular Admin & Dashboard Template</title>
-  <!-- <base href="/steex/angular/default/"> -->
-  <!-- <base href="/steex/angular/default-rtl/"> -->
-  <!-- <base href="/steex/angular/default-dark/"> -->
-  <!-- <base href="/steex/angular/material/"> -->
-  <!-- <base href="/steex/angular/creative/"> -->
-  <!-- <base href="/steex/angular/minimal/"> -->
-  <!-- <base href="/steex/angular/modern/"> -->
-  <!-- <base href="/steex/angular/interaction/"> -->
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE"></script>
+  
+  <!-- Script para mantener el modo oscuro -->
+  <script>
+    (function() {
+      // Obtiene el tema guardado o usa 'dark' por defecto
+      var theme = localStorage.getItem('steex-theme') || 'dark';
+      
+      // Aplica el tema inmediatamente
+      document.documentElement.setAttribute('data-bs-theme', theme);
+      document.documentElement.setAttribute('data-layout-mode', theme);
+      
+      // Guarda el tema si no existe
+      if (!localStorage.getItem('steex-theme')) {
+        localStorage.setItem('steex-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 
 <body>

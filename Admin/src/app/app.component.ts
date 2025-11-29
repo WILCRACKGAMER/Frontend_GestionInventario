@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'Steex';
+export class AppComponent implements OnInit {
+  title = 'steex';
+
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit() {
+    // Fuerza el modo oscuro al iniciar
+    this.themeService.setDarkMode();
+  }
 }

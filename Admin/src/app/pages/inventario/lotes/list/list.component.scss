@@ -26,6 +26,11 @@
   font-weight: bold;
   border-radius: 8px;
   border: none;
+  transition: all 0.3s ease;
+  
+  i {
+    transition: transform 0.3s ease;
+  }
 }
 
 .btn-lote-primary:hover {
@@ -130,4 +135,25 @@
 
 .table-responsive {
   overflow: visible !important;
+}
+
+.collapse-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+  
+  &.show {
+    max-height: 2000px;
+    opacity: 1;
+    transition: max-height 0.5s ease-in, opacity 0.4s ease-in;
+  }
+}
+
+.table-container {
+  transition: opacity 0.3s ease-out;
+  
+  &.hidden {
+    display: none;
+  }
 }

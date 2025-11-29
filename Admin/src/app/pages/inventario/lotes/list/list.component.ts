@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { BreadcrumbsComponent } from 'src/app/shared/breadcrumbs/breadcrumbs.component';
+import { CreateComponent } from '../create/create.component';
 import { Lote } from 'src/app/Modelos/Inventario/lote.model';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from 'src/environments/environment.prod';
 
 interface LoteConDropdown extends Lote {
   dropdownOpen?: boolean;
@@ -11,13 +13,12 @@ interface LoteConDropdown extends Lote {
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [BreadcrumbsComponent, CommonModule],
+  imports: [BreadcrumbsComponent, CommonModule, CreateComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
   
-  // Datos
   lotes: LoteConDropdown[] = [];
   lotesPaginados: LoteConDropdown[] = [];
   
@@ -30,20 +31,20 @@ export class ListComponent implements OnInit {
   finRegistro: number = 0;
   paginasVisibles: number[] = [];
   
-  // Estado de carga
   cargando: boolean = false;
   
+  // Control del formulario de crear
+  mostrarFormularioCrear: boolean = false;
+  
   // URL del API
-  private apiUrl = 'https://localhost:7149/Lotes/Listar';
+  private apiUrl = `${environment.apiBaseUrl}/Lotes/Listar`;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    // Cargar los datos desde el API
     this.cargarLotes();
   }
 
-  // Cerrar dropdowns al hacer clic fuera
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -53,19 +54,12 @@ export class ListComponent implements OnInit {
   }
 
   toggleDropdown(lote: LoteConDropdown): void {
-    console.log('Toggle dropdown para lote:', lote.lote_Id, 'Estado actual:', lote.dropdownOpen);
-    
-    // Cerrar todos los demás dropdowns
     this.lotesPaginados.forEach(l => {
       if (l.lote_Id !== lote.lote_Id) {
         l.dropdownOpen = false;
       }
     });
-    
-    // Toggle del dropdown actual
     lote.dropdownOpen = !lote.dropdownOpen;
-    
-    console.log('Nuevo estado:', lote.dropdownOpen);
   }
 
   closeAllDropdowns(): void {
@@ -84,8 +78,6 @@ export class ListComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar los lotes:', error);
         this.cargando = false;
-        // Aquí puedes mostrar un mensaje de error al usuario
-        // Por ejemplo usando un servicio de notificaciones
       }
     });
   }
@@ -130,26 +122,25 @@ export class ListComponent implements OnInit {
   }
 
   onCrear(): void {
-    console.log('Crear nuevo lote');
-    // Aquí implementarás la lógica para crear un nuevo lote
-    // Por ejemplo: this.router.navigate(['/lotes/crear']);
+    this.mostrarFormularioCrear = !this.mostrarFormularioCrear;
   }
 
-  onDetalle(lote: LoteConDropdown): void {
-    lote.dropdownOpen = false;
-    console.log('Ver detalle del lote:', lote);
-    // Aquí implementarás la lógica para ver el detalle
+  onLoteGuardado(): void {
+    this.mostrarFormularioCrear = false;
+    this.cargarLotes();
+  }
+
+  onFormularioCancelado(): void {
+    this.mostrarFormularioCrear = false;
   }
 
   onEditar(lote: LoteConDropdown): void {
     lote.dropdownOpen = false;
     console.log('Editar lote:', lote);
-    // Aquí implementarás la lógica para editar
   }
 
   onEliminar(lote: LoteConDropdown): void {
     lote.dropdownOpen = false;
     console.log('Eliminar lote:', lote);
-    // Aquí implementarás la lógica para eliminar
   }
-} 
+}
