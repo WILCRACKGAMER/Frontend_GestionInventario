@@ -1,18 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-breadcrumbs',
+  standalone: true,
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss']
 })
 export class BreadcrumbsComponent {
-
   @Input() title: string | undefined;
-  @Input()
-  breadcrumbItems!: Array<{
-    active?: boolean;
-    label?: string;
-  }>;
+  @Input() breadcrumbItems!: Array<{ active?: boolean; label?: string }>;
 
   Item!: Array<{
     label?: string;
