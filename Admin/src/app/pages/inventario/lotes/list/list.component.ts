@@ -6,6 +6,7 @@ import { Lote } from 'src/app/Modelos/Inventario/lote.model';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/environments/environment.prod';
+import Swal from 'sweetalert2';
 
 interface LoteConDropdown extends Lote {
   dropdownOpen?: boolean;
@@ -169,7 +170,44 @@ export class ListComponent implements OnInit {
 
   onEliminar(lote: LoteConDropdown): void {
     lote.dropdownOpen = false;
-    console.log('Eliminar lote:', lote);
-    // Aquí implementarás la lógica de eliminación
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Deseas eliminar este registro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarLote(lote.lote_Id);
+      }
+    });
+  }
+
+  eliminarLote(loteId: number): void {
+    const urlEliminar = `${environment.apiBaseUrl}/Lote/Eliminar`;
+    this.http.post(urlEliminar, { lote_Id: loteId }).subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: '¡Eliminado!',
+          text: 'El registro ha sido eliminado con éxito',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+        this.cargarLotes();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el lote:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al eliminar el registro',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
   }
 }
