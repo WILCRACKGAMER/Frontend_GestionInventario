@@ -14,8 +14,8 @@
           type="button" 
           class="btn btn-lote-primary" 
           (click)="onCrear()">
-          <i [class]="mostrarFormularioCrear ? 'ri-close-line' : 'ri-add-line'" class="align-bottom me-1"></i> 
-          {{ mostrarFormularioCrear ? 'Ocultar' : 'Nuevo' }}
+          <i [class]="(mostrarFormularioCrear || mostrarFormularioEditar) ? 'ri-close-line' : 'ri-add-line'" class="align-bottom me-1"></i> 
+          {{ (mostrarFormularioCrear || mostrarFormularioEditar) ? 'Cerrar' : 'Nuevo' }}
         </button>
       </div>
 
@@ -31,7 +31,18 @@
           </div>
         </div>
 
-        <div class="table-container" [class.hidden]="mostrarFormularioCrear">
+        <!-- Formulario de edición (Collapse) -->
+        <div class="collapse-container" [class.show]="mostrarFormularioEditar">
+          <div class="p-3" *ngIf="mostrarFormularioEditar">
+            <app-edit-lote
+              [loteId]="loteIdEditar"
+              (onActualizado)="onLoteActualizado()"
+              (onCancelado)="onFormularioEdicionCancelado()">
+            </app-edit-lote>
+          </div>
+        </div>
+
+        <div class="table-container" [class.hidden]="mostrarFormularioCrear || mostrarFormularioEditar">
           <div class="table-responsive">
             <table class="table mb-0 lotes-table">
               <thead>

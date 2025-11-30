@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { BreadcrumbsComponent } from 'src/app/shared/breadcrumbs/breadcrumbs.component';
 import { CreateComponent } from '../create/create.component';
+import { EditComponent } from '../edit/edit.component';
 import { Lote } from 'src/app/Modelos/Inventario/lote.model';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -13,7 +14,7 @@ interface LoteConDropdown extends Lote {
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [BreadcrumbsComponent, CommonModule, CreateComponent],
+  imports: [BreadcrumbsComponent, CommonModule, CreateComponent, EditComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
@@ -35,6 +36,10 @@ export class ListComponent implements OnInit {
   
   // Control del formulario de crear
   mostrarFormularioCrear: boolean = false;
+  
+  // Control del formulario de editar
+  mostrarFormularioEditar: boolean = false;
+  loteIdEditar: number = 0;
   
   // URL del API
   private apiUrl = `${environment.apiBaseUrl}/Lotes/Listar`;
@@ -122,7 +127,15 @@ export class ListComponent implements OnInit {
   }
 
   onCrear(): void {
-    this.mostrarFormularioCrear = !this.mostrarFormularioCrear;
+    // Si hay algún formulario abierto, cerrar ambos
+    if (this.mostrarFormularioCrear || this.mostrarFormularioEditar) {
+      this.mostrarFormularioCrear = false;
+      this.mostrarFormularioEditar = false;
+      this.loteIdEditar = 0;
+    } else {
+      // Si no hay ninguno abierto, abrir el de crear
+      this.mostrarFormularioCrear = true;
+    }
   }
 
   onLoteGuardado(): void {
@@ -136,11 +149,27 @@ export class ListComponent implements OnInit {
 
   onEditar(lote: LoteConDropdown): void {
     lote.dropdownOpen = false;
-    console.log('Editar lote:', lote);
+    if (this.mostrarFormularioCrear) {
+      this.mostrarFormularioCrear = false;
+    }
+    this.loteIdEditar = lote.lote_Id;
+    this.mostrarFormularioEditar = true;
+  }
+
+  onLoteActualizado(): void {
+    this.mostrarFormularioEditar = false;
+    this.loteIdEditar = 0;
+    this.cargarLotes();
+  }
+
+  onFormularioEdicionCancelado(): void {
+    this.mostrarFormularioEditar = false;
+    this.loteIdEditar = 0;
   }
 
   onEliminar(lote: LoteConDropdown): void {
     lote.dropdownOpen = false;
     console.log('Eliminar lote:', lote);
+    // Aquí implementarás la lógica de eliminación
   }
 }
