@@ -17,7 +17,7 @@ interface LoteConDropdown extends Lote {
   standalone: true,
   imports: [BreadcrumbsComponent, CommonModule, CreateComponent, EditComponent],
   templateUrl: './list.component.html',
-  styleUrl: './list.component.scss'
+  styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
   

@@ -1,0 +1,251 @@
+/* CONTENEDOR PRINCIPAL */
+.salidas-container {
+  background: #181a20;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* CARD */
+.salidas-card {
+  background: #1f2128;
+  border: 1px solid #5e35b1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.salidas-card-header {
+  background: #5e35b1;
+  padding: 15px;
+  border-bottom: 4px solid #ffe082;
+}
+
+/* BOTONES */
+.btn-salida-primary {
+  background: #ffe082;
+  color: #181a20;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.3s ease;
+  
+  i {
+    transition: transform 0.3s ease;
+  }
+}
+
+.btn-salida-primary:hover {
+  background: #ffdf99;
+}
+
+.btn-salida-filter {
+  background: #97979a;
+  color: #181a20;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.3s ease;
+  
+  i {
+    transition: transform 0.3s ease;
+  }
+}
+
+.btn-salida-filter:hover {
+  background: #b4b4b6;
+}
+
+/* PANEL DE FILTROS */
+.filtros-panel {
+  background: #262830;
+  border-bottom: 2px solid #5e35b1;
+}
+
+.filtro-input {
+  background: #1f2128;
+  border: 1px solid #5e35b1;
+  color: #ffffff;
+  border-radius: 6px;
+  
+  &:focus {
+    background: #1f2128;
+    border-color: #ffe082;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(255, 224, 130, 0.25);
+  }
+  
+  &::placeholder {
+    color: #97979a;
+  }
+
+  option {
+    background: #1f2128;
+    color: #ffffff;
+  }
+}
+
+.btn-salida-aplicar {
+  background: #4caf50;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #45a049;
+  }
+}
+
+.btn-salida-limpiar {
+  background: #e53935;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #d32f2f;
+  }
+}
+
+/* TABLA */
+.salidas-table {
+  color: #ffffff;
+  background: #181a20;
+}
+
+.salidas-table thead tr {
+  background: #5e35b1;
+  color: #ffffff;
+}
+
+.salidas-table tbody tr {
+  border-bottom: 1px solid #2b2d33;
+}
+
+.salidas-table tbody tr:hover {
+  background: rgba(94, 53, 177, 0.15);
+}
+
+/* ESTADO BADGES */
+.estado-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.estado-enviada {
+  background: #ffe082;
+  color: #181a20;
+}
+
+.estado-recibida {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+/* DROPDOWN */
+.btn-actions {
+  background: #97979a;
+  color: #181a20;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.btn-actions:hover {
+  background: #b4b4b6;
+}
+
+.dropdown-menu-dark {
+  background: #1c1d22;
+}
+
+.dropdown-menu-dark .dropdown-item {
+  color: #ffffff;
+}
+
+.dropdown-menu-dark .dropdown-item:hover {
+  background: #5e35b1;
+}
+
+/* PAGINACIÓN */
+.salida-page {
+  background: #181a20;
+  border: 1px solid #5e35b1;
+  color: #ffe082;
+}
+
+.page-item.active .salida-page {
+  background: #5e35b1 !important;
+  color: #ffffff !important;
+  border-color: #5e35b1 !important;
+}
+
+.page-item .salida-page:hover {
+  background: #5e35b1;
+  color: #ffffff;
+}
+
+.dropdown-menu {
+  position: absolute !important;
+  z-index: 1000 !important;
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block !important;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.table-responsive {
+  overflow: visible !important;
+}
+
+.table-scroll {
+  overflow-x: auto !important;
+  max-width: 100%;
+  
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #1f2128;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #5e35b1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #7e57c2;
+    }
+  }
+}
+
+.collapse-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+  
+  &.show {
+    max-height: 2000px;
+    opacity: 1;
+    transition: max-height 0.5s ease-in, opacity 0.4s ease-in;
+  }
+}
+
+.table-container {
+  transition: opacity 0.3s ease-out;
+}
+
+/* SPINNER */
+.spinner-border {
+  color: #ffe082 !important;
+}

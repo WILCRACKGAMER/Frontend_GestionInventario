@@ -1,0 +1,214 @@
+<app-breadcrumbs 
+  [title]="'Salidas'"
+  [breadcrumbItems]="[
+    { label: 'Inventario' },
+    { label: 'Salidas', active: true }
+  ]"
+></app-breadcrumbs>
+
+<div class="row salidas-container">
+  <div class="col-lg-12">
+    <div class="card salidas-card shadow-lg">
+      <div class="card-header d-flex align-items-center justify-content-between salidas-card-header">
+        <button 
+          type="button" 
+          class="btn btn-salida-primary" 
+          (click)="onCrear()">
+          <i class="ri-add-line align-bottom me-1"></i> 
+          Nuevo
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-salida-filter" 
+          (click)="toggleFiltros()">
+          <i [class]="mostrarFiltros ? 'ri-close-line' : 'ri-filter-3-line'" class="align-bottom me-1"></i> 
+          {{ mostrarFiltros ? 'Cerrar' : 'Filtros' }}
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+        
+        <!-- Panel de Filtros (Collapse) -->
+        <div class="collapse-container" [class.show]="mostrarFiltros">
+          <div class="p-3 filtros-panel" *ngIf="mostrarFiltros">
+            <form class="row g-3">
+              <div class="col-md-4">
+                <label for="fechaInicio" class="form-label text-white">Fecha Inicio</label>
+                <input 
+                  type="date" 
+                  class="form-control filtro-input" 
+                  id="fechaInicio"
+                  [(ngModel)]="filtros.fechaInicio"
+                  name="fechaInicio">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="fechaFin" class="form-label text-white">Fecha Fin</label>
+                <input 
+                  type="date" 
+                  class="form-control filtro-input" 
+                  id="fechaFin"
+                  [(ngModel)]="filtros.fechaFin"
+                  name="fechaFin">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="destino" class="form-label text-white">Sucursal Destino</label>
+                <select 
+                  class="form-select filtro-input" 
+                  id="destino"
+                  [(ngModel)]="filtros.sali_Destino"
+                  name="destino">
+                  <option [ngValue]="null">Todas las sucursales</option>
+                  <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucu_Id">
+                    {{ sucursal.sucu_Nombre }}
+                  </option>
+                </select>
+              </div>
+              
+              <div class="col-12 d-flex gap-2">
+                <button 
+                  type="button" 
+                  class="btn btn-salida-aplicar" 
+                  (click)="aplicarFiltros()">
+                  <i class="ri-search-line me-1"></i> Aplicar Filtros
+                </button>
+                
+                <button 
+                  type="button" 
+                  class="btn btn-salida-limpiar" 
+                  (click)="limpiarFiltros()">
+                  <i class="ri-refresh-line me-1"></i> Limpiar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-responsive table-scroll">
+            <table class="table mb-0 salidas-table">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">Acciones</th>
+                  <th>No.</th>
+                  <th>Origen</th>
+                  <th>Dirección Origen</th>
+                  <th>Destino</th>
+                  <th>Dirección Destino</th>
+                  <th>Costo Total</th>
+                  <th>Usuario Envío</th>
+                  <th>Fecha Envío</th>
+                  <th>Usuario Recibido</th>
+                  <th>Fecha Recibido</th>
+                  <th>Estado</th>
+                  <th>Usuario Creación</th>
+                  <th>Fecha Creación</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let salida of salidasPaginadas">
+                  <td>
+                      <div class="dropdown position-relative">
+                          <button class="btn btn-actions dropdown-toggle" 
+                              type="button" 
+                              (click)="toggleDropdown(salida); $event.stopPropagation()">
+                              Acciones
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark" 
+                              [style.display]="salida.dropdownOpen ? 'block' : 'none'"
+                              style="position: absolute; z-index: 1050;">
+                              <li>
+                                  <a class="dropdown-item" href="javascript:void(0);" (click)="onVerDetalle(salida); $event.stopPropagation()">
+                                      <i class="ri-eye-line me-2"></i>Detalle
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item" href="javascript:void(0);" (click)="onEditar(salida); $event.stopPropagation()">
+                                      <i class="ri-pencil-line me-2"></i>Recibir
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </td>
+                  <td>{{ salida.secuencia }}</td>
+                  <td>{{ salida.sucursalOrigen }}</td>
+                  <td>{{ salida.direccionOrigen }}</td>
+                  <td>{{ salida.sucursalDestino }}</td>
+                  <td>{{ salida.direccionDestino }}</td>
+                  <td>{{ salida.sali_CostoTotal | currency: 'L ' }}</td>
+                  <td>{{ salida.usuarioEnvio }}</td>
+                  <td>{{ salida.sali_FechaEnvio | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ salida.usuarioRecibido || '-' }}</td>
+                  <td>{{ salida.sali_FechaRecibido ? (salida.sali_FechaRecibido | date: 'dd/MM/yyyy HH:mm') : '-' }}</td>
+                  <td>
+                    <span class="badge estado-badge"
+                          [ngClass]="{
+                            'estado-enviada': salida.estado === 'Enviada a Sucursal',
+                            'estado-recibida': salida.estado === 'Recibido en Sucursal'
+                          }">
+                      {{ salida.estado }}
+                    </span>
+                  </td>
+                  <td>{{ salida.usuarioCreacion }}</td>
+                  <td>{{ salida.sali_FechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+
+                <tr *ngIf="salidas.length === 0 && !cargando">
+                  <td colspan="14" class="text-center py-4">
+                    <i class="ri-inbox-line fs-1 text-muted"></i>
+                    <p class="text-muted mt-2">No hay salidas registradas</p>
+                  </td>
+                </tr>
+
+                <tr *ngIf="cargando">
+                  <td colspan="14" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Cargando...</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginación -->
+          <div class="row justify-content-between align-items-center p-3" *ngIf="salidas.length > 0">
+            <div class="col-sm-6 text-muted">
+              Mostrando 
+              <span class="fw-semibold text-white">{{ inicioRegistro }}</span> a 
+              <span class="fw-semibold text-white">{{ finRegistro }}</span> de 
+              <span class="fw-semibold text-white">{{ totalRegistros }}</span> registros
+            </div>
+
+            <div class="col-sm-6">
+              <ul class="pagination pagination-sm justify-content-end">
+                <li class="page-item" [ngClass]="{ 'disabled': paginaActual === 1 }">
+                  <a class="page-link salida-page" href="javascript:void(0);" (click)="cambiarPagina(paginaActual - 1)">
+                    <i class="mdi mdi-chevron-left"></i>
+                  </a>
+                </li>
+
+                <li class="page-item" *ngFor="let pagina of paginasVisibles" 
+                    [ngClass]="{ 'active': pagina === paginaActual }">
+                  <a class="page-link salida-page" href="javascript:void(0);" (click)="cambiarPagina(pagina)">
+                    {{ pagina }}
+                  </a>
+                </li>
+
+                <li class="page-item" [ngClass]="{ 'disabled': paginaActual === totalPaginas }">
+                  <a class="page-link salida-page" href="javascript:void(0);" (click)="cambiarPagina(paginaActual + 1)">
+                    <i class="mdi mdi-chevron-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
